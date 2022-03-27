@@ -23,7 +23,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "webpack",
+    "compile": "webpack --stats-error-details",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
@@ -50,7 +50,9 @@
   },
   "dependencies": {
     "@kubernetes/client-node": "^0.16.3",
+    "bufferutil": "^4.0.6",
     "stream-buffers": "^3.0.2",
+    "utf-8-validate": "^5.0.9",
     "yaml": "^2.0.0-11"
   }
 }
