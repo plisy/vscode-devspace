@@ -5,3 +5,5 @@ Using [Devspace.sh](https://devspace.sh) for development in Kubernetes solves a 
 The magic can sometimes break. Either file sync crashes, or the devs forgets to turn it on. Don't ask me how I know that. I just do.
 
 This extension helps by adding sync status to the status bar. Now when someone (by someone I totally mean me) forgets to run `devspace dev` and expects things to JustWork, they can easily it's not really supposed to work!
+
+Testing on https://github.com/plisy/experiment-devspace

@@ -3,10 +3,6 @@ import * as vscode from "vscode";
 import * as k8s from "@kubernetes/client-node";
 import * as streamBuffers from "stream-buffers";
 import { parse } from "yaml";
-import * as fs from "fs";
-import * as util from "util";
-
-const readFile = util.promisify(fs.readFile);
 
 // Yeah, not cool but since the whole thing is in one file, ...
 const globals = {
@@ -23,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
     globals.kubernetesConfig.loadFromDefault();
     globals.kubernetesClient = globals.kubernetesConfig.makeApiClient(k8s.CoreV1Api);
     globals.kubernetesExec = new k8s.Exec(globals.kubernetesConfig);
-    globals.devspaceSyncStatusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    globals.devspaceSyncStatusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
     globals.devspaceSyncStatusBar.command = "vscode-devspace.refres-sync-status";
 
     context.subscriptions.push(
@@ -33,6 +29,11 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(globals.devspaceSyncStatusBar);
+
+    updateStatusBar();
+    setInterval(() => {
+        updateStatusBar();
+    }, 30 * 1000);
 }
 
 // this method is called when your extension is deactivated
@@ -69,14 +70,10 @@ async function updateStatusBar() {
 // It's an internal implementation detail, but we can use it to check if sync is running.
 // There is no public API we could use instead.
 async function getLastDevspaceNamespaces(): Promise<Set<string>> {
-    let generatedContents: Buffer;
-    try {
-        // This file is guaranteed to exist, at least initially because the extension is activated
-        // when it is found in the workspace.
-        generatedContents = await readFile(".devspace/generated.yaml");
-    } catch {
-        throw new Error("Could not get .devspace/generated.yaml contents.");
-    }
+    // This file is guaranteed to exist, at least initially because the extension is activated
+    // when it is found in the workspace.
+    const firstRoot = vscode.workspace.workspaceFolders![0].uri;
+    let generatedContents = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(firstRoot, ".devspace/generated.yaml"));
 
     // # ...
     // profiles:

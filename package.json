@@ -2,7 +2,8 @@
   "name": "vscode-devspace",
   "displayName": "vscode-devspace",
   "description": "Wrapper around Devspace.sh to simplify development.",
-  "version": "0.0.1",
+  "repository": "https://github.com/plisy/vscode-devspace",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.65.0"
   },
